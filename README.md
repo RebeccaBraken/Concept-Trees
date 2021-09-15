@@ -162,6 +162,7 @@ What I would have liked to add with more time:
 - Create dataframes of the edges for backup and optionally read dataframes to save BabelNet-keys.     
 - Compare BabelNet-IDs of entity pairs to check if they are equal.     
 - Optional directed networks.     
+- Add multi-edges to include all of the different edge-labels.
 
 ## License
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use concept_trees except in compliance with the License. A copy of the License is included in the project, see the file [LICENSE](LICENSE).
