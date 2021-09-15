@@ -143,26 +143,26 @@ To give those files to the project, you can run the program with command line ar
 ```
 python concept_trees.py text1.txt text2.json
 ```
-The resulting networks will be saved to the project-folder so that the you can take a look at the different network generation steps.  
+The resulting networks will be saved to the project-folder so that the you can take a look at the different network generation steps.       
 *wordsimilarity_network*       
-The network with all edges with a word-similarity larger than the defined SIMILARITY_THRESHOLD.
+The network with all edges with a word-similarity larger than the defined SIMILARITY_THRESHOLD.     
 *babelnet_network*       
-The network with the babelnet-edges on top of the wordsimilarity-network.
-*wikipedia_network_direct*      
-The network with the direct wikipedia-edges on top of the babelnet_network.
+The network with the babelnet-edges on top of the wordsimilarity-network.     
+*wikipedia_network_direct*         
+The network with the direct wikipedia-edges on top of the babelnet_network.     
 *wikipedia_network_indirect*       
-The network with the indirect wikipedia-edges on top of wikipedia_network_direct.
+The network with the indirect wikipedia-edges on top of wikipedia_network_direct.          
 *weighted_network*       
-Network with additional similarity score on the network edges.
+Network with additional similarity score on the network edges.     
 *filtered_edge_network*       
-Network with an applied edge-filter. The other filtered networks are named analogical.
+Network with an applied edge-filter. The other filtered networks are named analogical.     
 
 
 ## Roadmap
-What I would have liked to add with more time:
-- Create dataframes of the edges for backup and optionally read dataframes to save BabelNet-keys.
-- Compare BabelNet-IDs of entity pairs to check if they are equal.
-- Optional directed networks.
+What I would have liked to add with more time:     
+- Create dataframes of the edges for backup and optionally read dataframes to save BabelNet-keys.     
+- Compare BabelNet-IDs of entity pairs to check if they are equal.     
+- Optional directed networks.     
 
 ## License
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use concept_trees except in compliance with the License. A copy of the License is included in the project, see the file [LICENSE](LICENSE).
