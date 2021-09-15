@@ -87,11 +87,12 @@ Provide step-by-step examples and descriptions of how to set up a development en
 - pip    
 
 *.env*    
-The project needs some parameters from a .env-file.   
-It needs to be stored in the same folder as the project.    
-You will find an example-.env on github.  
+The project needs some parameters from a .env-file.        
+It needs to be stored in the same folder as the project.           
+You will find an example-.env on github.         
 The .env needs to include:     
-BABELNET_KEY: A BabelNet api key. You can get one [here](https://babelnet.org/register).
+
+BABELNET_KEY: A BabelNet api key. You can get one [here](https://babelnet.org/register).       
 SIMILARITY_THRESHOLD: All node-pairs with a higher wordsimilarity than this threshold will be connected via an edge in the network.     
 WIKIPEDIA_SENTENCES: The amount of sentences of the wikipedia-summary to use per entity when creating the network.     
 LOCATION_SIZE: The node-size of locations.     
