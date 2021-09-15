@@ -6,8 +6,8 @@ import re
 import spacy
 import wikipedia
 
-import py_babelnet
 from py_babelnet.calls import BabelnetAPI
+import py_babelnet
 
 import pandas as pd
 
@@ -15,11 +15,12 @@ import os
 from dotenv import load_dotenv
 
 import json
-from json.decoder import JSONDecodeError
 import sys
 
 import time
 import socket
+from json.decoder import JSONDecodeError
+
 
 #initialize the api-key
 def init_bn_api():
@@ -31,6 +32,7 @@ def init_bn_api():
     api = BabelnetAPI(key)
     
     return api
+
 
 #initialize the values needed for the program - read all neccessary data from a .env-file
 def init_values():
@@ -57,6 +59,7 @@ def init_values():
         raise ValueError("No EDGES_WITHOUT_RELATIONSHIPTYPE found in .env-file. Please check your .env-file and try again.")
 
     return similarity_threshold, wikipedia_sentences, location_size, org_size, entity_size, unlabelled_edges
+
 
 #read the articles from the given files and return them in a string
 def read_articles(filenames: list):
@@ -87,7 +90,8 @@ def read_articles(filenames: list):
             except IOError:
                 print("Error: File {} does not appear to exist.".format(filename))
             else:
-                all_articles += data    
+                all_articles += data
+    
     if all_articles == "":
         raise ValueError("No articles found.")
     
@@ -95,7 +99,7 @@ def read_articles(filenames: list):
 
 
 #extract entity names from article
-def article_names(article: spacy.tokens.doc.Doc, sim_threshold = 0.8): 
+def extract_article_names(article: spacy.tokens.doc.Doc, sim_threshold = 0.8): 
     # labels of entities that we dont want as nodes
     unwanted_label = ["DATE", "TIME", "ORDINAL", "CARDINAL"]
     #in the end, nodes will contain all relevant entities and their labels
@@ -129,7 +133,6 @@ def article_names(article: spacy.tokens.doc.Doc, sim_threshold = 0.8):
 def reduce_nodes(similarities: dict, nodes: dict, sim_threshold = 0.8):
 
     extracted_entities = []
-    
     for entity in similarities:
         #append entity name to list if the name is not part of the name of another entity and they have a high similarity
         append = True
@@ -149,6 +152,7 @@ def reduce_nodes(similarities: dict, nodes: dict, sim_threshold = 0.8):
             extracted_entities.append(entity)
     #only keep those nodes which are in extracted_entities        
     nodes = {key: nodes[key] for key in extracted_entities}
+    
     return extracted_entities, similarities, nodes
 
 
@@ -170,6 +174,7 @@ def clean_similarities(similarities: dict, extracted_entities: list):
     for ent in similarities:
         for other_ent in similarities[ent]:
             similarities[ent][other_ent] /= 3 
+    
     return similarities
 
 
@@ -220,14 +225,15 @@ def add_edges_with_high_sim(network: nx.Graph(), extracted_entities: list, simil
     
     return network
 
+
 #returns a list of all overlapping entries in two lists (in this case: lists of entity_ids)
-def overlapping_ids(entity_ids: list, other_entity_ids: list):
+def find_overlapping_ids(entity_ids: list, other_entity_ids: list):
     overlap = list(set(entity_ids) & set(other_entity_ids))
     return overlap
 
 
 #determines a list of babelnet_ids for an entity
-def babelnet_ids(entity: str, api: py_babelnet.calls.BabelnetAPI):
+def find_babelnet_ids(entity: str, api: py_babelnet.calls.BabelnetAPI):
     bn_ids = []
     
     try:
@@ -250,11 +256,11 @@ def babelnet_ids(entity: str, api: py_babelnet.calls.BabelnetAPI):
 
 #finds all ID belonging to the extracted entities in the BabelNet Network and saves them in bn_ids
 #additionally extracts all edges belonging to those IDs and saves them in bn_info
-def babelnet_info(extracted_entities: list, api: py_babelnet.calls.BabelnetAPI, bn_info: dict, bn_ids: dict):
+def get_babelnet_info(extracted_entities: list, api: py_babelnet.calls.BabelnetAPI, bn_info: dict, bn_ids: dict):
     #find all IDS for the entity name in the babelnet network
     for entity in extracted_entities:
         if entity not in bn_ids:
-            bn_ids[entity] = babelnet_ids(entity, api)
+            bn_ids[entity] = find_babelnet_ids(entity, api)
 
         # find all outgoing edges from the entities in the babelnet network
         if (entity not in bn_info) and (entity in bn_ids):
@@ -367,7 +373,7 @@ def add_babelnet_edges(network: nx.Graph(), edges: pd.DataFrame, similarity_meas
 
 
 #creates a list of sentences from a text
-def sentences(text: str):
+def split_sentences(text: str):
     # split sentences and questions
     text = re.split('[.?!]', text)
     clean_sent = []
@@ -377,7 +383,7 @@ def sentences(text: str):
 
 
 #extract entities from the wikipedia-summary of the article-entities and calculate their similarity
-def wikipedia_similarity(nlp: spacy.language, extracted_entities: list, num_sentences = 3):
+def calculate_wikipedia_similarity(nlp: spacy.language, extracted_entities: list, num_sentences = 3):
     
     unwanted_label = ["DATE", "ORDINAL", "CARDINAL", "PERCENT"]
     #wiki_ents is a dictionary where the keys are the article entities and the values are lists of all entities which appear in the first (num_sentences) of their wikipedia-summary
@@ -405,7 +411,7 @@ def wikipedia_similarity(nlp: spacy.language, extracted_entities: list, num_sent
             print("Connection Error - please check your internet connection and try again.")
             raise
 
-        split_descr = sentences(descr)
+        split_descr = split_sentences(descr)
         split_descr = split_descr[:num_sentences]
         wiki_sentences[entity] = split_descr
         
@@ -445,7 +451,7 @@ def add_similarity(entity: str, other_entity: str, sim_score: float, similarity_
 
 
 #add the direct edges from wikipedia to the network and update the similarity measure
-def wikipedia_summary_ids(network: nx.Graph(), wiki_ents: dict, extracted_entities: list, similarity_measure: dict, sim_wiki: dict, api: py_babelnet.calls.BabelnetAPI):
+def find_direct_wikipedia_edges(network: nx.Graph(), wiki_ents: dict, extracted_entities: list, similarity_measure: dict, sim_wiki: dict, api: py_babelnet.calls.BabelnetAPI):
     new_edges = []
     already_added = []
     #dict where each lists of ids are assigned to entities
@@ -477,7 +483,7 @@ def wikipedia_summary_ids(network: nx.Graph(), wiki_ents: dict, extracted_entiti
                 #stop if there are not enough babel coins to find the wikipedia-ids -> this will be excepted in main(), where we will then continue without the wikipedia-edges
                 elif summ_entity not in wiki_ids:
                     try:
-                        wiki_ids[summ_entity] = babelnet_ids(summ_entity, api)
+                        wiki_ids[summ_entity] = find_babelnet_ids(summ_entity, api)
                     except ValueError:
                         print("Not enough BabelCoins - Continuing without the Wikipedia edges.")
                         raise ValueError()
@@ -536,7 +542,7 @@ def remove_duplicate_wikipedia_ents(bn_ids: dict, wiki_ents: dict, wiki_ids: dic
 
 
 #add the indirect wikipedia edges to the network
-def wikipedia_indirect_edges(network: nx.Graph(), wiki_ents_retrieved: dict, wikiIds_retrieved: dict):
+def find_indirect_wikipedia_edges(network: nx.Graph(), wiki_ents_retrieved: dict, wikiIds_retrieved: dict):
     new_edges = []
     already_added = []
     
@@ -579,12 +585,13 @@ def reset_edgecolors(network: nx.Graph()):
         network.edges[edge].pop("color", None)
     return network
 
+
 #compute the wikipedia networks or skip them if not enough babelcoins
 def compute_wikipedia_networks(network: nx.Graph(), bn_ids: dict, extracted_entities: list, similarity_measure: dict, api: py_babelnet.calls.BabelnetAPI, nlp: spacy.language, wikipedia_sentences: int):
-    wiki_ents, sim_wiki = wikipedia_similarity(nlp, extracted_entities, wikipedia_sentences)
+    wiki_ents, sim_wiki = calculate_wikipedia_similarity(nlp, extracted_entities, wikipedia_sentences)
     pyvis_network = Network()
     try:
-        wiki_ids, similaritiy_measure, network = wikipedia_summary_ids(network, wiki_ents, extracted_entities, similarity_measure, sim_wiki, api)
+        wiki_ids, similaritiy_measure, network = find_direct_wikipedia_edges(network, wiki_ents, extracted_entities, similarity_measure, sim_wiki, api)
     except ValueError:
         raise ValueError
     else:
@@ -592,7 +599,7 @@ def compute_wikipedia_networks(network: nx.Graph(), bn_ids: dict, extracted_enti
         pyvis_network.save_graph("wikipedia_network_direct_{}.html".format(time.strftime("%Y%m%d-%H%M%S")))
         network = reset_edgecolors(network)
         wikiIds_retrieved, wiki_entities_retrieved = remove_duplicate_wikipedia_ents(bn_ids, wiki_ents, wiki_ids)
-        network = wikipedia_indirect_edges(network, wiki_entities_retrieved, wikiIds_retrieved)
+        network = find_indirect_wikipedia_edges(network, wiki_entities_retrieved, wikiIds_retrieved)
         pyvis_network = Network()
         pyvis_network.from_nx(network)
         pyvis_network.save_graph("wikipedia_network_indirect_{}.html".format(time.strftime("%Y%m%d-%H%M%S")))
@@ -601,7 +608,7 @@ def compute_wikipedia_networks(network: nx.Graph(), bn_ids: dict, extracted_enti
 
 
 #add the similarity of two nodes as a value to the edges between two nodes
-def similarity_edges(network: nx.Graph(), similarity_measure: dict): 
+def add_similarity_to_edges(network: nx.Graph(), similarity_measure: dict): 
     for edge in network.edges:
         network.edges[edge]["weight"] = 0
     for entity in similarity_measure:
@@ -617,20 +624,24 @@ def similarity_edges(network: nx.Graph(), similarity_measure: dict):
                         network.edges[entity, other_entity]["title"] = weight_label
     return network
 
+
 #filter network for edges with a similarity larger than a given sim_threshold
 def filter_similarity(network: nx.Graph(), sim_threshold = 0.8):
     sim_network = nx.Graph([(u, v, properties) for u, v, properties in network.edges(data = True) if "weight" in properties and properties["weight"] > sim_threshold])
     return sim_network
+
 
 #filter network for nodes with certain labels
 def filter_node_labels(network: nx.Graph(), labels: list):
     filtered_network = nx.Graph([(u, v, properties) for u, v, properties in network.edges(data = True) if any(label in u.lower() or label in v.lower() for label in labels)])
     return filtered_network
 
+
 #filter network for edges with certain labels
 def filter_edge_labels(network: nx.Graph(), labels: list):
     filtered_network = nx.Graph([(u, v, properties) for u, v, properties in network.edges(data = True) if "title" in properties and not pd.isna(properties["title"]) and any(label in properties['title'].lower() for label in labels)])
     return filtered_network
+
 
 #interactively filters the network
 def filtering_process(network: nx.Graph()):
@@ -638,12 +649,13 @@ def filtering_process(network: nx.Graph()):
 
     while exit == False:
         filter_type = input("Do you wish to filter your network? \n [n] - filter nodes with a certain label \n [e] - filter edges with a certain label \n [s] - filter edges over a certain similarity threshold \n [other] - quit \n").lower()
-        
+        #differentiate between the different filter types
         if filter_type == "n":
             node_labels = [item for item in input("Please enter the node labels for which you want to filter the network: \n").split()]
             filtered_node_network = filter_node_labels(network, node_labels)
+            #dont save the network if it is empty
             if len(filtered_node_network.nodes) == 0:
-                print("No nodes found for labels {} \n.".format(node_labels))
+                print("No nodes found for labels {}.\n".format(node_labels))
             else:
                 pyvis_network = Network()
                 pyvis_network.from_nx(filtered_node_network)
@@ -706,30 +718,33 @@ def __main__():
             return   
     nlp_article = nlp(articles)
 
-    extracted_entities, similarities, nodes = article_names(nlp_article)
+    #create nodes
+    extracted_entities, similarities, nodes = extract_article_names(nlp_article)
     similarity_measure = clean_similarities(similarities, extracted_entities)
     network = add_nodes(network, nodes, location_size, org_size, entity_size)
+    #add edges between nodes with similarity larger than sim_threshold
     network = add_edges_with_high_sim(network, extracted_entities, similarity_measure, sim_threshold)
     pyvis_network.from_nx(network)
     pyvis_network.save_graph("wordsimilarity_network_{}.html".format(time.strftime("%Y%m%d-%H%M%S")))
     network = reset_edgecolors(network)
 
-    bn_info, bn_ids = babelnet_info(extracted_entities, api, bn_info, bn_ids)
-
+    #collect info from babelnet and find edges in the network
+    bn_info, bn_ids = get_babelnet_info(extracted_entities, api, bn_info, bn_ids)
     edges = find_babelnet_edges(bn_ids, bn_info)
-
+    #Create the babelnet network
     network, similarity_measure = add_babelnet_edges(network, edges, similarity_measure, unlabelled_edges)
     pyvis_network = Network()
     pyvis_network.from_nx(network)
     pyvis_network.save_graph("babelnet_network_{}.html".format(time.strftime("%Y%m%d-%H%M%S")))
     network = reset_edgecolors(network)
-
+    #If we dont run out of babel-coins, find the wikipedia-edges. Else, skip this part.
     try:
         network = compute_wikipedia_networks(network, bn_ids, extracted_entities, similarity_measure, api, nlp, wikipedia_sentences)
     except ValueError :
         pass
 
-    network = similarity_edges(network, similarity_measure)
+    #add the similarity score to the edge-labels
+    network = add_similarity_to_edges(network, similarity_measure)
     pyvis_network = Network()
     pyvis_network.from_nx(network)
     pyvis_network.save_graph("weighted_network_{}.html".format(time.strftime("%Y%m%d-%H%M%S")))
