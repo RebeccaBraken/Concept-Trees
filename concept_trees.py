@@ -590,13 +590,13 @@ def compute_wikipedia_networks(network: nx.Graph(), bn_ids: dict, extracted_enti
         raise ValueError
     else:
         pyvis_network.from_nx(network)
-        pyvis_network.save_graph("network_wikipedia_direct_{}.html".format(time.strftime("%Y%m%d-%H%M%S")))
+        pyvis_network.save_graph("wikipedia_network_direct_{}.html".format(time.strftime("%Y%m%d-%H%M%S")))
         network = reset_edgecolors(network)
         wikiIds_retrieved, wiki_entities_retrieved = remove_duplicate_wikipedia_ents(bn_ids, wiki_ents, wiki_ids)
         network = wikipedia_indirect_edges(network, wiki_entities_retrieved, wikiIds_retrieved)
         pyvis_network = Network()
         pyvis_network.from_nx(network)
-        pyvis_network.save_graph("network_wikipedia_indirect_{}.html".format(time.strftime("%Y%m%d-%H%M%S")))
+        pyvis_network.save_graph("wikipedia_network_indirect_{}.html".format(time.strftime("%Y%m%d-%H%M%S")))
         network = reset_edgecolors(network)
         return network
 
@@ -712,7 +712,7 @@ def __main__():
     network = add_nodes(network, nodes, location_size, org_size, entity_size)
     network = add_edges_with_high_sim(network, extracted_entities, similarity_measure, sim_threshold)
     pyvis_network.from_nx(network)
-    pyvis_network.save_graph("wordsimilarity_nw_{}.html".format(time.strftime("%Y%m%d-%H%M%S")))
+    pyvis_network.save_graph("wordsimilarity_network_{}.html".format(time.strftime("%Y%m%d-%H%M%S")))
     network = reset_edgecolors(network)
 
     bn_info, bn_ids = babelnet_info(extracted_entities, api, bn_info, bn_ids)
@@ -722,7 +722,7 @@ def __main__():
     network, similarity_measure = add_babelnet_edges(network, edges, similarity_measure, unlabelled_edges)
     pyvis_network = Network()
     pyvis_network.from_nx(network)
-    pyvis_network.save_graph("network_babelnet_{}.html".format(time.strftime("%Y%m%d-%H%M%S")))
+    pyvis_network.save_graph("babelnet_network_{}.html".format(time.strftime("%Y%m%d-%H%M%S")))
     network = reset_edgecolors(network)
 
     try:
