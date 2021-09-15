@@ -1,6 +1,6 @@
 # Concept Trees of News Stories
 
-The project extracts entities from one/multiple articles and detects relationships between them using BabelNet and Wikipedia. It then displays the entities and their relationships in a network.   
+This project extracts entities from one or multiple articles and detects relationships between them using BabelNet and Wikipedia. It then displays the entities and their relationships in a network.   
 The different steps of the network are saved as html-files.
 
 ## Motivation 
@@ -13,7 +13,7 @@ The goal of the project is to display relations between entities mentioned in an
 The entities from the articles are extracted using spaCy, which allows us to additionally calculate word-similarity.  
 
 *Interactive networks*         
-The project features interactive networks using pyvis: 
+This project features interactive networks using pyvis: 
 
 ![network.png](https://github.com/RebeccaBraken/Concept-Trees/blob/development/network_example.png)
 
