@@ -103,7 +103,6 @@ The `.env` needs to include:
 If you wish to install the packages into a virtual environment, you can do the following:
 - Linux:
 ```
-apt-get install python3.9-venv
 python3 -m venv /path_to_venv
 source /path_to_venv/bin/activate
 ```
