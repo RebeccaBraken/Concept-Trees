@@ -80,7 +80,6 @@ filtered_network = nx.Graph([edge for edge in network.edges if any(label in edge
 
 
 ## Installation        
-Provide step-by-step examples and descriptions of how to set up a development environment.
      
 *Requirements*   
 - python3.9 (64bit) 
