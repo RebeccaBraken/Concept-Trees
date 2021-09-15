@@ -81,25 +81,25 @@ filtered_network = nx.Graph([edge for edge in network.edges if any(label in edge
 
 ## Installation        
      
-*Requirements*   
+### Requirements   
 - python3.9 (64bit) 
 - pip    
 
-*.env*    
-The project needs some parameters from a .env-file.        
+### .env
+The project needs some parameters from a `.env` file.        
 It needs to be stored in the same folder as the project.           
-You will find an example-.env on github.         
-The .env needs to include:     
+You will find an example `.env` file in the github repository.         
+The `.env` needs to include:     
 
-BABELNET_KEY: A BabelNet api key. You can get one [here](https://babelnet.org/register).       
-SIMILARITY_THRESHOLD: All node-pairs with a higher wordsimilarity than this threshold will be connected via an edge in the network.     
-WIKIPEDIA_SENTENCES: The amount of sentences of the wikipedia-summary to use per entity when creating the network.     
-LOCATION_SIZE: The node-size of locations.     
-ORG_SIZE: The node-size of nodes which are Organizations / Companies.     
-OTHER_ENTITY_SIZE: The node-size of all other entities.     
-EDGES_WITHOUT_RELATIONSHIPTYPE: If set to False, BabelNet-edges with the unspecific label "Semantically related form" will not be added to the network.     
+`BABELNET_KEY` A BabelNet api key. You can get one [here](https://babelnet.org/register).       
+`SIMILARITY_THRESHOLD` All node-pairs with a higher wordsimilarity than this threshold will be connected via an edge in the network.     
+`WIKIPEDIA_SENTENCES` The amount of sentences of the wikipedia-summary to use per entity when creating the network.     
+`LOCATION_SIZE` The node-size of locations.     
+`ORG_SIZE` The node-size of nodes which are Organizations / Companies.     
+`OTHER_ENTITY_SIZE` The node-size of all other entities.     
+`EDGES_WITHOUT_RELATIONSHIPTYPE` If set to False, BabelNet-edges with the unspecific label "Semantically related form" will not be added to the network.     
      
-*Installation*  
+### Installation  
 If you wish to install the packages into a virtual environment, you can do the following:
 - Linux:
 ```
