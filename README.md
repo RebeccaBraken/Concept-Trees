@@ -9,10 +9,10 @@ In news articles, word choice used to refer to actors in the story tends to vary
 The goal of the project is to display relations between entities mentioned in an article. By extracting and labeling entities and their relations, we make a step towards identification of bias caused by metonymy/meronymy. A tree structure of representing entities and their relations within news articles enables news readers to: 1) have an overview of the news story participants, e.g., persons, organizations, countries, and their dependencies to each other, 2) assist in identification of bias that occurs via metonymy/meronymy. 
 
 ## Features
-*Entity extraction using spaCy*
+*Entity extraction using spaCy*         
 The entities from the articles are extracted using spaCy, which allows us to additionally calculate word-similarity.  
 
-*Interactive networks*
+*Interactive networks*         
 The project features interactive networks using pyvis: 
 
 ![network.png](https://github.com/RebeccaBraken/Concept-Trees/blob/development/network_example.png)
@@ -22,13 +22,13 @@ Edges are extracted from Wikipedia and Babelnet, newly added edges are colored i
 
 ![new_edges.png](https://github.com/RebeccaBraken/Concept-Trees/blob/development/new_edges_example.png)   
 
-*Similarity score*     
+*Similarity score*            
 There is also a similarity score included, which is added to the network edges:   
 ![edges_labels.png](https://github.com/RebeccaBraken/Concept-Trees/blob/development/edge_labels_example.png)
 
-*Filtering*
+*Filtering*          
 There are different filtering methods included, which allow the User to filter by node or edge labels or for edges with a similarity score higher than a chosen threshold.
-Here is an example of a network filtered by the node "United States":
+Here is an example of a network filtered by the node "United States":       
 ![filtered_network.png](https://github.com/RebeccaBraken/Concept-Trees/blob/development/nodefilter_example.png)
 
 
@@ -79,7 +79,7 @@ filtered_network = nx.Graph([edge for edge in network.edges if any(label in edge
 ```
 
 
-## Installation
+## Installation        
 Provide step-by-step examples and descriptions of how to set up a development environment.
      
 *Requirements*   
@@ -90,14 +90,14 @@ Provide step-by-step examples and descriptions of how to set up a development en
 The project needs some parameters from a .env-file.   
 It needs to be stored in the same folder as the project.    
 You will find an example-.env on github.  
-The .env needs to include:
+The .env needs to include:     
 BABELNET_KEY: A BabelNet api key. You can get one [here](https://babelnet.org/register).
-SIMILARITY_THRESHOLD: All node-pairs with a higher wordsimilarity than this threshold will be connected via an edge in the network.
-WIKIPEDIA_SENTENCES: The amount of sentences of the wikipedia-summary to use per entity when creating the network.
-LOCATION_SIZE: The node-size of locations.
-ORG_SIZE: The node-size of nodes which are Organizations / Companies.
-OTHER_ENTITY_SIZE: The node-size of all other entities.
-EDGES_WITHOUT_RELATIONSHIPTYPE: If set to False, BabelNet-edges with the unspecific label "Semantically related form" will not be added to the network.
+SIMILARITY_THRESHOLD: All node-pairs with a higher wordsimilarity than this threshold will be connected via an edge in the network.     
+WIKIPEDIA_SENTENCES: The amount of sentences of the wikipedia-summary to use per entity when creating the network.     
+LOCATION_SIZE: The node-size of locations.     
+ORG_SIZE: The node-size of nodes which are Organizations / Companies.     
+OTHER_ENTITY_SIZE: The node-size of all other entities.     
+EDGES_WITHOUT_RELATIONSHIPTYPE: If set to False, BabelNet-edges with the unspecific label "Semantically related form" will not be added to the network.     
      
 *Installation*  
 If you wish to install the packages into a virtual environment, you can do the following:
@@ -144,24 +144,25 @@ To give those files to the project, you can run the program with command line ar
 python concept_trees.py text1.txt text2.json
 ```
 The resulting networks will be saved to the project-folder so that the you can take a look at the different network generation steps.  
-*wordsimilarity_network*
+*wordsimilarity_network*       
 The network with all edges with a word-similarity larger than the defined SIMILARITY_THRESHOLD.
-*babelnet_network*
+*babelnet_network*       
 The network with the babelnet-edges on top of the wordsimilarity-network.
-*wikipedia_network_direct*
+*wikipedia_network_direct*      
 The network with the direct wikipedia-edges on top of the babelnet_network.
-*wikipedia_network_indirect*
+*wikipedia_network_indirect*       
 The network with the indirect wikipedia-edges on top of wikipedia_network_direct.
-*weighted_network*
+*weighted_network*       
 Network with additional similarity score on the network edges.
-*filtered_edge_network* 
+*filtered_edge_network*       
 Network with an applied edge-filter. The other filtered networks are named analogical.
 
 
 ## Roadmap
-- read from dataframe
-- compare overlapping babelnet-ids for object equality
-- 
+What I would have liked to add with more time:
+- Create dataframes of the edges for backup and optionally read dataframes to save BabelNet-keys.
+- Compare BabelNet-IDs of entity pairs to check if they are equal.
+- Optional directed networks.
 
 ## License
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use concept_trees except in compliance with the License. A copy of the License is included in the project, see the file [LICENSE](LICENSE).
