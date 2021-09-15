@@ -6,8 +6,8 @@ import re
 import spacy
 import wikipedia
 
-from py_babelnet.calls import BabelnetAPI
 import py_babelnet
+from py_babelnet.calls import BabelnetAPI
 
 import pandas as pd
 
@@ -15,11 +15,11 @@ import os
 from dotenv import load_dotenv
 
 import json
+from json.decoder import JSONDecodeError
 import sys
 
 import time
 import socket
-from json.decoder import JSONDecodeError
 
 #initialize the api-key
 def init_bn_api():
@@ -58,7 +58,7 @@ def init_values():
 
     return similarity_threshold, wikipedia_sentences, location_size, org_size, entity_size, unlabelled_edges
 
-#read the articles from the given files and put them in a string
+#read the articles from the given files and return them in a string
 def read_articles(filenames: list):
     
     all_articles = ""
@@ -87,8 +87,7 @@ def read_articles(filenames: list):
             except IOError:
                 print("Error: File {} does not appear to exist.".format(filename))
             else:
-                all_articles += data
-    
+                all_articles += data    
     if all_articles == "":
         raise ValueError("No articles found.")
     
