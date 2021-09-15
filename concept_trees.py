@@ -486,8 +486,8 @@ def wikipedia_summary_ids(network: nx.Graph(), wiki_ents: dict, extracted_entiti
                         print("Connection Error - please check your internet connection and try again.")
                         raise
        
-    network.add_edges_from(new_edges, color = "red", title = "wikipedia_direct")
-    network.add_edges_from(already_added, color = "black")
+    network.add_edges_from(new_edges, color = "red", title = "wikipedia direct")
+    network.add_edges_from(already_added, color = "black", title = "wikipedia direct")
     return wiki_ids, similarity_measure, network
 
 
@@ -570,7 +570,7 @@ def wikipedia_indirect_edges(network: nx.Graph(), wiki_ents_retrieved: dict, wik
                                         new_edges.append((other_entity, summ_entity))
                                         
     network.add_edges_from(new_edges, color = "red", title = "wikipedia indirect")
-    network.add_edges_from(already_added, color = "black")
+    network.add_edges_from(already_added, color = "black", title = "wikipedia indirect")
     return network
 
 
