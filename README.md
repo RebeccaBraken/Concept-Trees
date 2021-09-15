@@ -1,6 +1,6 @@
 # Concept Trees of News Stories
 
-This project extracts entities from one or multiple articles and detects relationships between them using BabelNet and Wikipedia. It then displays the entities and their relationships in a network.   
+This project extracts entities from one or multiple articles and detects relationships between them using [BabelNet](https://babelnet.org/) and Wikipedia. It then displays the entities and their relationships in a network.   
 The different steps of the network are saved as html-files.
 
 ## Motivation 
@@ -9,11 +9,11 @@ In news articles, word choice used to refer to actors in the story tends to vary
 The goal of the project is to display relations between entities mentioned in an article. By extracting and labeling entities and their relations, we make a step towards identification of bias caused by metonymy/meronymy. A tree structure of representing entities and their relations within news articles enables news readers to: 1) have an overview of the news story participants, e.g., persons, organizations, countries, and their dependencies to each other, 2) assist in identification of bias that occurs via metonymy/meronymy. 
 
 ## Features
-*Entity extraction using spaCy*         
+*Entity extraction using [spaCy](https://spacy.io/)*         
 The entities from the articles are extracted using spaCy, which allows us to additionally calculate word-similarity.  
 
 *Interactive networks*         
-This project features interactive networks using pyvis: 
+This project features interactive networks using [pyvis](https://pyvis.readthedocs.io/en/latest/): 
 
 ![network.png](https://github.com/RebeccaBraken/Concept-Trees/blob/development/network_example.png)
 
