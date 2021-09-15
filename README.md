@@ -15,21 +15,21 @@ The entities from the articles are extracted using spaCy, which allows us to add
 *Interactive networks*         
 This project features interactive networks using [pyvis](https://pyvis.readthedocs.io/en/latest/): 
 
-![network.png](https://github.com/RebeccaBraken/Concept-Trees/blob/development/network_example.png)
+![network.png](https://github.com/RebeccaBraken/Concept-Trees/blob/main/network_example.png)
 
 Additionally, different kinds of nodes are in different sizes. 
 Edges are extracted from Wikipedia and Babelnet, newly added edges are colored in red:  
 
-![new_edges.png](https://github.com/RebeccaBraken/Concept-Trees/blob/development/new_edges_example.png)   
+![new_edges.png](https://github.com/RebeccaBraken/Concept-Trees/blob/main/new_edges_example.png)   
 
 *Similarity score*            
 There is also a similarity score included, which is added to the network edges:   
-![edges_labels.png](https://github.com/RebeccaBraken/Concept-Trees/blob/development/edge_labels_example.png)
+![edges_labels.png](https://github.com/RebeccaBraken/Concept-Trees/blob/main/edge_labels_example.png)
 
 *Filtering*          
 There are different filtering methods included, which allow the User to filter by node or edge labels or for edges with a similarity score higher than a chosen threshold.
 Here is an example of a network filtered by the node "United States":       
-![filtered_network.png](https://github.com/RebeccaBraken/Concept-Trees/blob/development/nodefilter_example.png)
+![filtered_network.png](https://github.com/RebeccaBraken/Concept-Trees/blob/main/nodefilter_example.png)
 
 
 ## Code examples    
