@@ -144,17 +144,17 @@ To give those files to the project, you can run the program with command line ar
 python concept_trees.py text1.txt text2.json
 ```
 The resulting networks will be saved to the project-folder so that the you can take a look at the different network generation steps.       
-*wordsimilarity_network*       
+`wordsimilarity_network`       
 The network with all edges with a word-similarity larger than the defined SIMILARITY_THRESHOLD.     
-*babelnet_network*       
+`babelnet_network`       
 The network with the babelnet-edges on top of the wordsimilarity-network.     
-*wikipedia_network_direct*         
+`wikipedia_network_direct`         
 The network with the direct wikipedia-edges on top of the babelnet_network.     
-*wikipedia_network_indirect*       
+`wikipedia_network_indirect`       
 The network with the indirect wikipedia-edges on top of wikipedia_network_direct.          
-*weighted_network*       
+`weighted_network`       
 Network with additional similarity score on the network edges.     
-*filtered_edge_network*       
+`filtered_edge_network`       
 Network with an applied edge-filter. The other filtered networks are named analogical.     
 
 
